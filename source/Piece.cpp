@@ -5,7 +5,7 @@ Piece::Piece() = default;
 Piece::Piece(Type t, Color c)
 {
 	type = t;
-	hasMoved = false;
+	isMoved = false;
 	color = c;
 }
 
