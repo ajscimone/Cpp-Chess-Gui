@@ -8,10 +8,7 @@ Board::Board()
 	//  would be to either assign the pieces their starting positions and colors in this constructor or to have a separate
 	//  function which initializes these things which is then called from the Board constructor or from the game class.
 	squares = {};
-	Piece p{};
-	p.setColor(WHITE);
-	p.setType(KING);
-	Board::setPiece("e1", p);
+	Board::setBoard();
 }
 
 
