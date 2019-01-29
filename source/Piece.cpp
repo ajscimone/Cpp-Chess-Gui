@@ -60,6 +60,7 @@ char Piece::typeToChar(Type type) const
 		case ROOK: return 'R';
 		case QUEEN: return 'Q';
 		case KING: return 'K';
+		default: return ' ';
 	}
 }
 
@@ -69,5 +70,6 @@ char Piece::colorToChar(Color color) const
 	{
 		case WHITE: return 'W';
 		case BLACK: return 'B';
+		default: return ' ';
 	}
 }
