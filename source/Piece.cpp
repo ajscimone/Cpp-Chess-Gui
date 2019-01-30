@@ -39,7 +39,7 @@ void Piece::setType(Type type)
 	Piece::type = type;
 }
 
-bool Piece::isMoved() const
+bool Piece::getMoved() const
 {
 	return moved;
 }

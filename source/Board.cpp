@@ -9,26 +9,30 @@ Board::Board()
 
 }
 
+// Associates the spaces of a chess board with the array
 void Board::setMap()
 {
-
 	squares.resize(8, std::vector<Square>(8));
 
-	for (int i = 0; i < 8; i++) {
-		for (int j = 0; j < 8; j++) {
+	for (int i = 0; i < 8; i++) 
+	{
+		for (int j = 0; j < 8; j++) 
+		{
 			squareMap[spaces[i + j]] = squares[i][j];
 		}
 	}
 }
 
-// Print board
+// Print function
 void Board::printBoard()
 {
 	int i = 0;
-	for (std::string space : spaces) {
+	for (std::string space : spaces) 
+	{
 		std::cout << squareMap[space].getPiece() << ' ';
 		i++;
-		if (i == 8) {
+		if (i == 8) 
+		{
 			i = 0;
 			std::cout<<'\n';
 		}
@@ -48,41 +52,42 @@ Piece Board::getPiece(const std::string &coords)
 	return squareMap[coords].getPiece();
 }
 
+// Places the appropriate pieces on the appropriate spots to start a chess game
 void Board::setBoard()
 {
-	//White Rook Placement
+	// White Rook Placement
 	Piece wr1{ ROOK, WHITE };
 	Board::setPiece("a1", wr1);
 
-	//White Knight Placement
+	// White Knight Placement
 	Piece wn1{ KNIGHT , WHITE };
 	Board::setPiece("b1", wn1);
 
-	//White Bishop Placement
+	// White Bishop Placement
 	Piece wb1{ BISHOP , WHITE };
 	Board::setPiece("c1", wb1);
 
-	//White King Placement
+	// White King Placement
 	Piece wk{ KING , WHITE };
 	Board::setPiece("d1", wk);
 
-	//White Queen Placement
+	// White Queen Placement
 	Piece wq{ QUEEN ,WHITE };
 	Board::setPiece("e1", wq);
 
-	//White Bishop Placement
+	// White Bishop Placement
 	Piece wb2{ BISHOP , WHITE };
 	Board::setPiece("f1", wb2);
 
-	//White Knight Placement
+	// White Knight Placement
 	Piece wn2{ KNIGHT, WHITE };
 	Board::setPiece("g1", wn2);
 
-	//White Rook Placement
+	// White Rook Placement
 	Piece wr2{ ROOK , WHITE };
 	Board::setPiece("h1", wr2);
 
-	//White Pawn Placement
+	// White Pawn Placement
 	Piece wp1{ PAWN , WHITE };
 	Board::setPiece("a2", wp1);
 	Piece wp2{ PAWN , WHITE };
@@ -100,39 +105,39 @@ void Board::setBoard()
 	Piece wp8{ PAWN , WHITE };
 	Board::setPiece("h2", wp8);
 
-	//Black Rook Placement
+	// Black Rook Placement
 	Piece br1{ ROOK , BLACK };
 	Board::setPiece("a8", br1);
 
-	//Black Knight Placement
+	// Black Knight Placement
 	Piece bn1{ KNIGHT , BLACK };
 	Board::setPiece("b8", bn1);
 
-	//Black Bishop Placement
+	// Black Bishop Placement
 	Piece bb1{ BISHOP , BLACK };
 	Board::setPiece("c8", bb1);
 
-	//Black King Placement
+	// Black King Placement
 	Piece bk{ KING , BLACK };
 	Board::setPiece("d8", bk);
 
-	//Black Queen Placement
+	// Black Queen Placement
 	Piece bq{ QUEEN , BLACK };
 	Board::setPiece("e8", bq);
 
-	//Black Bishop Placement
+	// Black Bishop Placement
 	Piece bb2{ BISHOP , BLACK };
 	Board::setPiece("f8", bb2);
 
-	//Black Knight Placement
+	// Black Knight Placement
 	Piece bn2{ KNIGHT , BLACK };
 	Board::setPiece("g8", bn2);
 
-	//Black Rook Placement
+	// Black Rook Placement
 	Piece br2{ ROOK , BLACK };
 	Board::setPiece("h8", br2);
 
-	//Black Pawn Placement
+	// Black Pawn Placement
 	Piece bp1{ PAWN , BLACK };
 	Board::setPiece("a7", bp1);
 	Piece bp2{ PAWN , BLACK };
@@ -150,7 +155,6 @@ void Board::setBoard()
 	Piece bp8{ PAWN , BLACK };
 	Board::setPiece("h7", bp8);
 }
-
 
 // Destructor
 Board::~Board() = default;
