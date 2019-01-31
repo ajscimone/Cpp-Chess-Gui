@@ -13,5 +13,7 @@ install:
   - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-6 90
 
 script:
-  - g++ source/main.cpp source/Board.cpp source/Piece.cpp source/Square.cpp -std=c++17 -o travis_gcc_cpp17
-  - ./travis_gcc_cpp17
+  - mkdir -p build
+  - cd build
+  - cmake ${CMAKE_OPTIONS} -DCMAKE_CXX_FLAGS=${CXX_FLAGS} -DCMAKE_BUILD_TYPE=Coverage -DBUILD_TESTS=ON ..
+  - make
