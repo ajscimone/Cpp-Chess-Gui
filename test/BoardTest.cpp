@@ -1,4 +1,3 @@
-#define private public // for testing private methods
 #define CATCH_CONFIG_MAIN
 
 #include "../include/catch.hpp"
