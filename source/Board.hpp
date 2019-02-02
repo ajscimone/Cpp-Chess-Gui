@@ -16,12 +16,12 @@ public:
 	void printBoard();
 	Piece getPiece(const std::string &coords);
 	void setPiece(const std::string &coords, Piece piece);
-	int* getCoords(std::string coords);
+	int* coordToIndex(std::string coords);
+	std::vector<std::vector <Square> > squares;
 	~Board();
 private:
 	void setBoard();
 	void setMap();
-	std::vector<std::vector <Square> > squares;
 	std::map<std::string, Square> squareMap;
 	const std::string spaces[64] = 
 	{ 

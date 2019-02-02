@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 #include "Board.hpp"
 
 // Constructor
@@ -29,11 +30,12 @@ void Board::printBoard()
 	int i = 0;
 	for (std::string space : spaces) 
 	{
-		if (squareMap[space].getPiece().getType() != NONE)
+		std::cout << squareMap[space].getPiece();
+		/*if (squareMap[space].getPiece().getType() != NONE)
 		{
 			std::cout << squareMap[space].getPiece();
 		}
-		else { std::cout << " - "; }
+		else { std::cout << " - "; }*/
 		i++;
 		if (i == 8) 
 		{
@@ -57,17 +59,14 @@ Piece Board::getPiece(const std::string &coords)
 }
 
 /* Returns the the vector indices from a bord space. */
-int* Board::getCoords(std::string coords)
+int* Board::coordToIndex(std::string coords)
 {
+	char let = coords[0];
+	char* num = &coords[1];
+	std::cout << "coords " << coords << '\n';
 	int indicies[2];
-	char row = coords[1];
-	indicies[0] = 8 - atoi(&row);
-	switch (coords[0]) {
-	case 97: 
-		indicies[1] = 0;
-		break;
-	default: break;
-	}
+	indicies[0] = let - 97;
+	indicies[1] = 8-std::atoi(num);
 	return indicies;
 }
 
@@ -173,6 +172,21 @@ void Board::setBoard()
 	Board::setPiece("g7", bp7);
 	Piece bp8{ PAWN , BLACK };
 	Board::setPiece("h7", bp8);
+
+	for (int i = 0; i < 8; i++)
+	{
+		for (int j = 0; j < 8; j++)
+		{
+			if (squares[i][j].getPiece().getType() != NONE)
+			{
+				continue;
+			}
+			else {
+				Piece blankPiece{ NONE , OPEN };
+				squares[i][j].setPiece(blankPiece);
+			}
+		}
+	}
 }
 
 // Destructor

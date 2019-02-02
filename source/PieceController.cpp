@@ -33,87 +33,99 @@ bool PieceController::movePiece(Board *B, std::string startCord, std::string end
 }
 
 bool PieceController::movePawn(Board* B, std::string startCord, std::string endCord, Color player) {
-	if (player == WHITE) {
-		Piece moving = B->getPiece(startCord);
-		B->setPiece(endCord, moving);
-		Piece empty = Piece(NONE, WHITE);
-		B->setPiece(startCord, empty);
-		return true;
-	}
 
+	makeMove(B, startCord, endCord, player);
 	return false;
 };
 bool PieceController::attackPawn(Board* B, std::string startCord, std::string endCord, Color player) {
-	std::vector<Square> possibleMoves;
 
 	return false;
 }
 bool PieceController::moveRook(Board* B, std::string startCord, std::string endCord, Color player) {
 
 	//check that either row or column are the same
-	int sx, sy, ex, ey;
-	int* start = B->getCoords(startCord);
-	sx = start[0];
-	sy = start[1];
-	int* end = B->getCoords(endCord);
-	ex = end[0];
-	ey = end[1];
+	int startRow, startCol, endRow, endCol;
+	int* start = B->coordToIndex(startCord);
+	startCol = start[0];
+	startRow = start[1];
+	int* end = B->coordToIndex(endCord);
+	endCol = end[0];
+	endRow = end[1];
 
-	//std::cout << "start to end" << sx << sy << " " << ex << ey;
-	if (sx == ex) // moving left and right
-	{
-		if (sy > ey)
-		{
-			Piece moving = B->getPiece(startCord);
-			B->setPiece(endCord, moving);
-			Piece empty = Piece(NONE, WHITE);
-			B->setPiece(startCord, empty);
-			return true;
-		}
-		else if(ey > sy)
-		{
-			Piece moving = B->getPiece(startCord);
-			B->setPiece(endCord, moving);
-			Piece empty = Piece(NONE, WHITE);
-			B->setPiece(startCord, empty);
-			return true;
-		}
+	// Check that end square is open
+	if (B->getPiece(endCord).getColor() == player) {
+		return false;
 	}
-	else if (sy == ey) //moving up an down
+
+	if (startRow == endRow) // moving left and right
 	{
-		if (sx > ex) // moving up
+		if (startCol > endCol) // moving left
 		{
-			for (int i = ex; i < sx; i++) {
-				/*
-				if (B->getPiece(startCord).getType() != NONE) {
-				return false;
+			for (int i = startCol - 1; i < endCol + 1; i--)
+			{
+				if (B->getPiece(endCord).getType() != NONE) {
+					return false; //piece in the way
 				}
-				*/
 			}
-			Piece moving = B->getPiece(startCord);
-			B->setPiece(endCord, moving);
-			Piece empty = Piece(NONE, WHITE);
-			B->setPiece(startCord, empty);
+
+			// Valid Move
+			makeMove(B, startCord, endCord, player);
 			return true;
 		}
-		else if (ex > sx) //moving down
+		else if(endCol > startCol) //moving right
 		{
-			for (int i = sx; i < ex; i++) {
-				/*
-				if (B->getPiece(startCord).getType() != NONE) {
-					return false;
+			for (int i = startCol + 1; i < endCol - 1; i++)
+			{
+				if (B->squares[startCol][i].getPiece().getType() != NONE) {
+					return false; //piece in the way
 				}
-				*/
-
 			}
-			Piece moving = B->getPiece(startCord);
-			B->setPiece(endCord, moving);
-			Piece empty = Piece(NONE, WHITE);
-			B->setPiece(startCord, empty);
+
+			// Valid Move
+			makeMove(B, startCord, endCord, player);
 			return true;
+		}
+		else {
+			return false;
 		}
 	}
 
+	// Moving up an down
+	else if (startCol == endCol) 
+	{
+		// Moving up
+		if (startRow > endRow)
+		{
+			for (int i = startRow-1; i < endRow+1; i--) 
+			{
+				if (B->squares[i][endCol].getPiece().getType() != NONE) {
+					return false; //piece in the way
+				}
+			}
+
+			// Valid Move
+			makeMove(B, startCord, endCord, player);
+			return true;
+		}
+
+		// Moving Down
+		else if (endRow > startRow)
+		{
+			for (int i = startRow; i < endRow-1; i++)
+			{
+				if (B->squares[i][endCol].getPiece().getType() != NONE) {
+					return false; //piece in the way
+				}
+
+			}
+
+			// Valid Move
+			makeMove(B, startCord, endCord, player);
+			return true;
+		}
+	}
+
+	// Invalid Move
 	return false;
 }
 bool PieceController::moveKnight(Board* B, std::string startCord, std::string endCord, Color player) {
@@ -124,4 +136,11 @@ bool PieceController::moveBishop(Board* B, std::string startCord, std::string en
 }
 bool PieceController::moveQueen(Board* B, std::string startCord, std::string endCord, Color player) {
 	return false;
+}
+
+void PieceController::makeMove(Board* B, std::string startCord, std::string endCord, Color player) {
+	Piece moving = B->getPiece(startCord);
+	B->setPiece(endCord, moving);
+	Piece empty = Piece(NONE, OPEN);
+	B->setPiece(startCord, empty);
 }

@@ -17,6 +17,7 @@ private:
 	bool moveKnight(Board*, std::string, std::string, Color);
 	bool moveBishop(Board*, std::string, std::string, Color);
 	bool moveQueen(Board*, std::string, std::string, Color);
+	void makeMove(Board*, std::string, std::string, Color);
 
 };
 
