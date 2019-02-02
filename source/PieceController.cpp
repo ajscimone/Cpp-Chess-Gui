@@ -5,11 +5,10 @@ PieceController::PieceController() {
 }
 
 bool PieceController::movePiece(Board *B, std::string startCord, std::string endCord, Color player) {
-	
+
 	Piece pieceCheck = B->getPiece(startCord);
 	if (pieceCheck.getColor() == player) {
 		bool moveCheck = false;
-		std::cout << pieceCheck.getType();
 		switch (pieceCheck.getType()) {
 		case PAWN:
 			moveCheck = movePawn(B, startCord, endCord, player);
@@ -50,6 +49,71 @@ bool PieceController::attackPawn(Board* B, std::string startCord, std::string en
 	return false;
 }
 bool PieceController::moveRook(Board* B, std::string startCord, std::string endCord, Color player) {
+
+	//check that either row or column are the same
+	int sx, sy, ex, ey;
+	int* start = B->getCoords(startCord);
+	sx = start[0];
+	sy = start[1];
+	int* end = B->getCoords(endCord);
+	ex = end[0];
+	ey = end[1];
+
+	//std::cout << "start to end" << sx << sy << " " << ex << ey;
+	if (sx == ex) // moving left and right
+	{
+		if (sy > ey)
+		{
+			Piece moving = B->getPiece(startCord);
+			B->setPiece(endCord, moving);
+			Piece empty = Piece(NONE, WHITE);
+			B->setPiece(startCord, empty);
+			return true;
+		}
+		else if(ey > sy)
+		{
+			Piece moving = B->getPiece(startCord);
+			B->setPiece(endCord, moving);
+			Piece empty = Piece(NONE, WHITE);
+			B->setPiece(startCord, empty);
+			return true;
+		}
+	}
+	else if (sy == ey) //moving up an down
+	{
+		if (sx > ex) // moving up
+		{
+			for (int i = ex; i < sx; i++) {
+				/*
+				if (B->getPiece(startCord).getType() != NONE) {
+				return false;
+				}
+				*/
+			}
+			Piece moving = B->getPiece(startCord);
+			B->setPiece(endCord, moving);
+			Piece empty = Piece(NONE, WHITE);
+			B->setPiece(startCord, empty);
+			return true;
+		}
+		else if (ex > sx) //moving down
+		{
+			for (int i = sx; i < ex; i++) {
+				/*
+				if (B->getPiece(startCord).getType() != NONE) {
+					return false;
+				}
+				*/
+
+			}
+			Piece moving = B->getPiece(startCord);
+			B->setPiece(endCord, moving);
+			Piece empty = Piece(NONE, WHITE);
+			B->setPiece(startCord, empty);
+			return true;
+		}
+	}
+
 	return false;
 }
 bool PieceController::moveKnight(Board* B, std::string startCord, std::string endCord, Color player) {
