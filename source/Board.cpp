@@ -31,11 +31,6 @@ void Board::printBoard()
 	for (std::string space : spaces) 
 	{
 		std::cout << squareMap[space].getPiece();
-		/*if (squareMap[space].getPiece().getType() != NONE)
-		{
-			std::cout << squareMap[space].getPiece();
-		}
-		else { std::cout << " - "; }*/
 		i++;
 		if (i == 8) 
 		{
@@ -57,6 +52,12 @@ Piece Board::getPiece(const std::string &coords)
 {
 	return squareMap[coords].getPiece();
 }
+
+Piece Board::getPieceByIndex(const int i, const int j)
+{
+	return squares[i][j].getPiece();
+}
+
 
 /* Returns the the vector indices from a bord space. */
 int* Board::coordToIndex(std::string coords)

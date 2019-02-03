@@ -1,10 +1,12 @@
 #include "PieceController.hpp"
 
-PieceController::PieceController() {
+PieceController::PieceController() 
+{
 
 }
 
-bool PieceController::movePiece(Board *B, std::string startCord, std::string endCord, Color player) {
+bool PieceController::movePiece(Board *B, std::string startCord, std::string endCord, Color player) 
+{
 
 	Piece pieceCheck = B->getPiece(startCord);
 	if (pieceCheck.getColor() == player) {
@@ -28,20 +30,22 @@ bool PieceController::movePiece(Board *B, std::string startCord, std::string end
 			return false;
 		}
 	}
-
 	return false;
 }
 
-bool PieceController::movePawn(Board* B, std::string startCord, std::string endCord, Color player) {
+bool PieceController::movePawn(Board* B, std::string startCord, std::string endCord, Color player) 
+{
 
 	makeMove(B, startCord, endCord, player);
 	return false;
 };
-bool PieceController::attackPawn(Board* B, std::string startCord, std::string endCord, Color player) {
+bool PieceController::attackPawn(Board* B, std::string startCord, std::string endCord, Color player) 
+{
 
 	return false;
 }
-bool PieceController::moveRook(Board* B, std::string startCord, std::string endCord, Color player) {
+bool PieceController::moveRook(Board* B, std::string startCord, std::string endCord, Color player) 
+{
 
 	//check that either row or column are the same
 	int startRow, startCol, endRow, endCol;
@@ -76,7 +80,7 @@ bool PieceController::moveRook(Board* B, std::string startCord, std::string endC
 		{
 			for (int i = startCol + 1; i < endCol - 1; i++)
 			{
-				if (B->squares[startCol][i].getPiece().getType() != NONE) {
+				if (B->getPieceByIndex(startCol, i).getType() != NONE) {
 					return false; //piece in the way
 				}
 			}
@@ -98,7 +102,7 @@ bool PieceController::moveRook(Board* B, std::string startCord, std::string endC
 		{
 			for (int i = startRow-1; i < endRow+1; i--) 
 			{
-				if (B->squares[i][endCol].getPiece().getType() != NONE) {
+				if (B->getPieceByIndex(i, endCol).getType() != NONE) {
 					return false; //piece in the way
 				}
 			}
@@ -113,7 +117,7 @@ bool PieceController::moveRook(Board* B, std::string startCord, std::string endC
 		{
 			for (int i = startRow; i < endRow-1; i++)
 			{
-				if (B->squares[i][endCol].getPiece().getType() != NONE) {
+				if (B->getPieceByIndex(i, endCol).getType() != NONE) {
 					return false; //piece in the way
 				}
 
@@ -128,17 +132,21 @@ bool PieceController::moveRook(Board* B, std::string startCord, std::string endC
 	// Invalid Move
 	return false;
 }
-bool PieceController::moveKnight(Board* B, std::string startCord, std::string endCord, Color player) {
+bool PieceController::moveKnight(Board* B, std::string startCord, std::string endCord, Color player) 
+{
 	return false;
 }
-bool PieceController::moveBishop(Board* B, std::string startCord, std::string endCord, Color player) {
+bool PieceController::moveBishop(Board* B, std::string startCord, std::string endCord, Color player) 
+{
 	return false;
 }
-bool PieceController::moveQueen(Board* B, std::string startCord, std::string endCord, Color player) {
+bool PieceController::moveQueen(Board* B, std::string startCord, std::string endCord, Color player) 
+{
 	return false;
 }
 
-void PieceController::makeMove(Board* B, std::string startCord, std::string endCord, Color player) {
+void PieceController::makeMove(Board* B, std::string startCord, std::string endCord, Color player) 
+{
 	Piece moving = B->getPiece(startCord);
 	B->setPiece(endCord, moving);
 	Piece empty = Piece(NONE, OPEN);
