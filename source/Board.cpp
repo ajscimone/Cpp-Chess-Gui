@@ -30,14 +30,15 @@ void Board::printBoard()
 	int i = 0;
 	for (std::string space : spaces) 
 	{
-		std::cout << squareMap[space].getPiece();
+
+		std::cout << squareMap[space].getPiece() << ' ';
+
 		i++;
 		if (i == 8) 
 		{
 			i = 0;
 			std::cout<<'\n';
 		}
-
 	}
 }
 
