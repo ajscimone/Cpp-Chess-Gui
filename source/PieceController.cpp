@@ -47,7 +47,7 @@ bool PieceController::attackPawn(Board* B, std::string startCord, std::string en
 bool PieceController::moveRook(Board* B, std::string startCord, std::string endCord, Color player) 
 {
 
-	//check that either row or column are the same
+	// Check that either row or column are the same
 	int startRow, startCol, endRow, endCol;
 	int* start = B->coordToIndex(startCord);
 	startCol = start[0];
@@ -56,14 +56,16 @@ bool PieceController::moveRook(Board* B, std::string startCord, std::string endC
 	endCol = end[0];
 	endRow = end[1];
 
-	// Check that end square is open
+	// Check that destination square is open
 	if (B->getPiece(endCord).getColor() == player) {
 		return false;
 	}
 
-	if (startRow == endRow) // moving left and right
+	// Moving Left or Right
+	if (startRow == endRow)
 	{
-		if (startCol > endCol) // moving left
+		// Moving Left
+		if (startCol > endCol)
 		{
 			for (int i = startCol - 1; i < endCol + 1; i--)
 			{
@@ -76,7 +78,9 @@ bool PieceController::moveRook(Board* B, std::string startCord, std::string endC
 			makeMove(B, startCord, endCord, player);
 			return true;
 		}
-		else if(endCol > startCol) //moving right
+
+		// Moving Right
+		else if(endCol > startCol)
 		{
 			for (int i = startCol + 1; i < endCol - 1; i++)
 			{
@@ -94,10 +98,10 @@ bool PieceController::moveRook(Board* B, std::string startCord, std::string endC
 		}
 	}
 
-	// Moving up an down
+	// Moving Up or Down
 	else if (startCol == endCol) 
 	{
-		// Moving up
+		// Moving Up
 		if (startRow > endRow)
 		{
 			for (int i = startRow-1; i < endRow+1; i--) 

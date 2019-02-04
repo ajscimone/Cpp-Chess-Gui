@@ -58,13 +58,11 @@ Piece Board::getPieceByIndex(const int i, const int j)
 	return squares[i][j].getPiece();
 }
 
-
 /* Returns the the vector indices from a bord space. */
 int* Board::coordToIndex(std::string coords)
 {
 	char let = coords[0];
 	char* num = &coords[1];
-	std::cout << "coords " << coords << '\n';
 	int indicies[2];
 	indicies[0] = let - 97;
 	indicies[1] = 8-std::atoi(num);
