@@ -358,12 +358,14 @@ bool Board::isPathClear(const std::pair<int, int> &fromCoords, const std::pair<i
 				std::swap(fromTemp, toTemp);
 			}
 
+			int j = fromTemp.second + 1;
 			for (int i = fromTemp.first + 1; i < toTemp.first; i++)
 			{
-				if (isOccupied(std::make_pair(i, i)))
+				if (isOccupied(std::make_pair(i, j)))
 				{
 					return false;
 				}
+				j++;
 			}
 
 			// Checked all intermediate locations and found them to be empty, so can return true

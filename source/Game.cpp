@@ -71,4 +71,18 @@ void Game::run()
 	board.movePiece(std::make_pair(5, 0), std::make_pair(5, 5));
 	board.printBoard();
 
+	std::cout << "Testing Queen Move" << std::endl;
+	board.movePiece(std::make_pair(0, 3), std::make_pair(4, 3));
+	board.printBoard();
+	board.movePiece(std::make_pair(4, 3), std::make_pair(6, 5));
+	board.printBoard();
+
+	std::cout << "Testing Queen Move Error" << std::endl;
+	board.movePiece(std::make_pair(6, 5), std::make_pair(0, 3));
+	board.printBoard();
+
+	std::cout << "Testing Queen Diag Other" << std::endl;
+	board.movePiece(std::make_pair(6, 5), std::make_pair(4, 7));
+	board.printBoard();
+
 }
