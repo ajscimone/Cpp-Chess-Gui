@@ -28,7 +28,7 @@ add_executable(Main
 		source/Knight.hpp 
 		source/Knight.cpp 
 		source/King.hpp 
-		source/King.cpp)
+		source/King.cpp
 		source/Queen.hpp
 		source/Queen.cpp)
 
