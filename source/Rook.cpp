@@ -21,6 +21,3 @@ bool Rook::isValidMove(const Board *board, const std::pair<int, int> &fromCoords
 	return false;
 
 }
-
-
-// Do I need to check that the final piece is a piece of the opposite color

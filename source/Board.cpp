@@ -5,6 +5,8 @@
 #include "Pawn.hpp"
 #include "Rook.hpp"
 #include "Bishop.hpp"
+#include "Knight.hpp"
+#include "King.hpp"
 
 /* Constructor */
 Board::Board()
@@ -46,9 +48,16 @@ void Board::prepPieces()
 	setPiece(std::make_pair(7, 0), std::make_unique<Rook>(WHITE));
 	setPiece(std::make_pair(7, 7), std::make_unique<Rook>(WHITE));
 
+	// White Knights
+	setPiece(std::make_pair(7, 1), std::make_unique<Knight>(WHITE));
+	setPiece(std::make_pair(7, 6), std::make_unique<Knight>(WHITE));
+
 	// White Bishops
 	setPiece(std::make_pair(7, 2), std::make_unique<Bishop>(WHITE));
 	setPiece(std::make_pair(7, 5), std::make_unique<Bishop>(WHITE));
+
+	// White King
+	setPiece(std::make_pair(7, 4), std::make_unique<King>(WHITE));
 
 	// Black pawns
 	setPiece(std::make_pair(1, 0), std::make_unique<Pawn>(BLACK));
@@ -64,9 +73,16 @@ void Board::prepPieces()
 	setPiece(std::make_pair(0, 0), std::make_unique<Rook>(BLACK));
 	setPiece(std::make_pair(0, 7), std::make_unique<Rook>(BLACK));
 
+	// Black Knights
+	setPiece(std::make_pair(0, 1), std::make_unique<Knight>(BLACK));
+	setPiece(std::make_pair(0, 6), std::make_unique<Knight>(BLACK));
+
 	// Black Bishops
 	setPiece(std::make_pair(0, 2), std::make_unique<Bishop>(BLACK));
 	setPiece(std::make_pair(0, 5), std::make_unique<Bishop>(BLACK));
+
+	// Black King
+	setPiece(std::make_pair(0, 4), std::make_unique<King>(BLACK));
 }
 
 /* Sets a piece to its appropriate location in the map. */
@@ -130,6 +146,7 @@ bool Board::movePiece(const std::pair<int, int> &fromCoords, const std::pair<int
 	{
 		std::cout << "Error: Cannot move from "
 		<< fromCoords.first << "," << fromCoords.second
+		<< " to " << toCoords.first << "," << toCoords.second
 		<< " because there's a friendly piece at destination" << std::endl;
 		return false;
 	}
@@ -330,6 +347,15 @@ int Board::getMoveLength(const std::pair<int, int> &fromCoords, const std::pair<
 	}
 }
 
+// The King may castle if permitted (https://en.wikipedia.org/wiki/Castling)
+bool Board::isValidCastle(const std::pair<int, int>& fromCoords, const std::pair<int, int>& toCoords) const
+{
+	// TODO: Implement castling
+	return false;
+}
+
+
+
 /* Checks whether there is a clear path between two points. Note that this only checks the intermediate spaces. In
  * other words, if the destination (as recorded in toCoords) is occupied, but all spaces between are empty, then this
  * function will still evaluate to true. The thinking behind this is that for all pieces except the pawn (which has its
@@ -366,7 +392,7 @@ bool Board::isPathClear(const std::pair<int, int> &fromCoords, const std::pair<i
 		{
 			if (isOccupied(std::make_pair(i, fromTemp.second)))
 			{
-				return false;
+			return false;
 			}
 		}
 
@@ -375,15 +401,56 @@ bool Board::isPathClear(const std::pair<int, int> &fromCoords, const std::pair<i
 	}
 	else if (isHorizontal)
 	{
-		// We can halve the number of for-loops if we swap the start and end points depending on the direction of travel
-		if (!movingEast)
+	// We can halve the number of for-loops if we swap the start and end points depending on the direction of travel
+	if (!movingEast)
+	{
+		std::swap(fromTemp, toTemp);
+	}
+
+	for (int i = fromTemp.second + 1; i < toTemp.second; i++)
+	{
+		if (isOccupied(std::make_pair(fromTemp.first, i)))
+		{
+			return false;
+		}
+	}
+
+	// Checked all intermediate locations and found them to be empty, so can return true
+	return true;
+	}
+	else if (isDiagonal)
+	{
+	if (movingSouth == movingEast) 			// moving southeast or northwest
+	{
+		// loop assumes southeast travel, swap if that's not the case
+		if (!movingSouth && !movingEast)
 		{
 			std::swap(fromTemp, toTemp);
 		}
 
-		for (int i = fromTemp.second + 1; i < toTemp.second; i++)
+		for (int i = fromTemp.first + 1; i < toTemp.first; i++)
 		{
-			if (isOccupied(std::make_pair(fromTemp.first, i)))
+			if (isOccupied(std::make_pair(i, i)))
+			{
+				return false;
+			}
+		}
+
+		// Checked all intermediate locations and found them to be empty, so can return true
+		return true;
+
+	}
+	else if (movingSouth != movingEast)		// moving northeast or southwest
+	{
+		// loop assumes northeast travel, swap if that's not the case
+		if (movingSouth && !movingEast)
+		{
+			std::swap(fromTemp, toTemp);
+		}
+
+		for (int i = fromTemp.first + 1; i < toTemp.first; i++)
+		{
+			if (isOccupied(std::make_pair(i, 7 - i)))
 			{
 				return false;
 			}
@@ -392,47 +459,6 @@ bool Board::isPathClear(const std::pair<int, int> &fromCoords, const std::pair<i
 		// Checked all intermediate locations and found them to be empty, so can return true
 		return true;
 	}
-	else if (isDiagonal)
-	{
-		if (movingSouth == movingEast) 			// moving southeast or northwest
-		{
-			// loop assumes southeast travel, swap if that's not the case
-			if (!movingSouth && !movingEast)
-			{
-				std::swap(fromTemp, toTemp);
-			}
-
-			for (int i = fromTemp.first + 1; i < toTemp.first; i++)
-			{
-				if (isOccupied(std::make_pair(i, i)))
-				{
-					return false;
-				}
-			}
-
-			// Checked all intermediate locations and found them to be empty, so can return true
-			return true;
-
-		}
-		else if (movingSouth != movingEast)		// moving northeast or southwest
-		{
-			// loop assumes northeast travel, swap if that's not the case
-			if (movingSouth && !movingEast)
-			{
-				std::swap(fromTemp, toTemp);
-			}
-
-			for (int i = fromTemp.first + 1; i < toTemp.first; i++)
-			{
-				if (isOccupied(std::make_pair(i, 7 - i)))
-				{
-					return false;
-				}
-			}
-
-			// Checked all intermediate locations and found them to be empty, so can return true
-			return true;
-		}
 	}
 
 	// path is neither vertical, horizontal, nor diagonal, so it's not a clear path
@@ -457,6 +483,23 @@ bool Board::isForwardMove(const std::pair<int, int> &fromCoords, const std::pair
 		return false;
 	}
 }
+
+/* Determines if a move is 2 squares in any direction, and 1 square in a perpendicular direction*/
+bool Board::isKnightMove(const std::pair<int, int>& fromCoords, const std::pair<int, int>& toCoords) const
+{
+	int verticalDifference = abs(toCoords.first - fromCoords.first);
+	int horizontalDifference = abs(toCoords.second - fromCoords.second);
+
+	if ((verticalDifference == 2 && horizontalDifference == 1) || (verticalDifference == 1 && horizontalDifference == 2))
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+
+ }
 
 /* Destructor */
 Board::~Board() = default;
