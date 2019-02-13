@@ -52,7 +52,7 @@ add_executable(BoardTest
 		source/Knight.hpp 
 		source/Knight.cpp 
 		source/King.hpp 
-		source/King.cpp)
+		source/King.cpp
 		source/Queen.hpp
 		source/Queen.cpp)
 target_link_libraries(BoardTest TestRunner)
