@@ -7,6 +7,8 @@
 #include "Bishop.hpp"
 #include "Knight.hpp"
 #include "King.hpp"
+#include "Queen.hpp"
+
 
 /* Constructor */
 Board::Board()
@@ -58,6 +60,9 @@ void Board::prepPieces()
 
 	// White King
 	setPiece(std::make_pair(7, 4), std::make_unique<King>(WHITE));
+  
+	// White Queen
+	setPiece(std::make_pair(7, 3), std::make_unique<Queen>(WHITE));
 
 	// Black pawns
 	setPiece(std::make_pair(1, 0), std::make_unique<Pawn>(BLACK));
@@ -81,8 +86,13 @@ void Board::prepPieces()
 	setPiece(std::make_pair(0, 2), std::make_unique<Bishop>(BLACK));
 	setPiece(std::make_pair(0, 5), std::make_unique<Bishop>(BLACK));
 
+
 	// Black King
 	setPiece(std::make_pair(0, 4), std::make_unique<King>(BLACK));
+  
+	// Black Queen
+	setPiece(std::make_pair(0, 3), std::make_unique<Queen>(BLACK));
+
 }
 
 /* Sets a piece to its appropriate location in the map. */
@@ -371,6 +381,13 @@ bool Board::isPathClear(const std::pair<int, int> &fromCoords, const std::pair<i
 	bool movingSouth = fromCoords.first < toCoords.first; 			// "south" meaning from black side to white side
 	bool movingEast = fromCoords.second < toCoords.second;			// "east" meaning from white left to white right
 
+	// Check if the destination has a friendly piece; if so, we can't move there
+	if (isOccupied(toCoords) && (getPiece(fromCoords)->getColor() == getPiece(toCoords)->getColor()))
+	{
+		std::cout << "Invalid move (friendly piece at destination)." << std::endl;
+		return false;
+	}
+
 	// If same or adjacent location, then path is definitely clear
 	if (moveLength == 0 || moveLength == 1)
 	{
@@ -392,7 +409,7 @@ bool Board::isPathClear(const std::pair<int, int> &fromCoords, const std::pair<i
 		{
 			if (isOccupied(std::make_pair(i, fromTemp.second)))
 			{
-			return false;
+				return false;
 			}
 		}
 
@@ -401,64 +418,66 @@ bool Board::isPathClear(const std::pair<int, int> &fromCoords, const std::pair<i
 	}
 	else if (isHorizontal)
 	{
-	// We can halve the number of for-loops if we swap the start and end points depending on the direction of travel
-	if (!movingEast)
-	{
-		std::swap(fromTemp, toTemp);
-	}
-
-	for (int i = fromTemp.second + 1; i < toTemp.second; i++)
-	{
-		if (isOccupied(std::make_pair(fromTemp.first, i)))
+		// We can halve the number of for-loops if we swap the start and end points depending on the direction of travel
+		if (!movingEast)
 		{
-			return false;
+			std::swap(fromTemp, toTemp);
 		}
-	}
 
-	// Checked all intermediate locations and found them to be empty, so can return true
-	return true;
+		for (int i = fromTemp.second + 1; i < toTemp.second; i++)
+		{
+			if (isOccupied(std::make_pair(fromTemp.first, i)))
+			{
+				return false;
+			}
+		}
+
+		// Checked all intermediate locations and found them to be empty, so can return true
+		return true;
 	}
 	else if (isDiagonal)
 	{
-	if (movingSouth == movingEast) 			// moving southeast or northwest
-	{
-		// loop assumes southeast travel, swap if that's not the case
-		if (!movingSouth && !movingEast)
+		if (movingSouth == movingEast) 			// moving southeast or northwest
 		{
-			std::swap(fromTemp, toTemp);
-		}
-
-		for (int i = fromTemp.first + 1; i < toTemp.first; i++)
-		{
-			if (isOccupied(std::make_pair(i, i)))
+			// loop assumes southeast travel, swap if that's not the case
+			if (!movingSouth && !movingEast)
 			{
-				return false;
+				std::swap(fromTemp, toTemp);
 			}
-		}
 
-		// Checked all intermediate locations and found them to be empty, so can return true
-		return true;
-
-	}
-	else if (movingSouth != movingEast)		// moving northeast or southwest
-	{
-		// loop assumes northeast travel, swap if that's not the case
-		if (movingSouth && !movingEast)
-		{
-			std::swap(fromTemp, toTemp);
-		}
-
-		for (int i = fromTemp.first + 1; i < toTemp.first; i++)
-		{
-			if (isOccupied(std::make_pair(i, 7 - i)))
+			int j = fromTemp.second + 1;
+			for (int i = fromTemp.first + 1; i < toTemp.first; i++)
 			{
-				return false;
+				if (isOccupied(std::make_pair(i, j)))
+				{
+					return false;
+				}
+				j++;
 			}
-		}
 
-		// Checked all intermediate locations and found them to be empty, so can return true
-		return true;
-	}
+			// Checked all intermediate locations and found them to be empty, so can return true
+			return true;
+
+		}
+		else if (movingSouth != movingEast)		// moving northeast or southwest
+		{
+			// loop assumes northeast travel, swap if that's not the case
+			if (movingSouth && !movingEast)
+			{
+				std::swap(fromTemp, toTemp);
+			}
+
+			for (int i = fromTemp.first + 1; i < toTemp.first; i++)
+			{
+				if (isOccupied(std::make_pair(i, 7 - i)))
+				{
+					return false;
+				}
+			}
+
+			// Checked all intermediate locations and found them to be empty, so can return true
+			return true;
+		}
 	}
 
 	// path is neither vertical, horizontal, nor diagonal, so it's not a clear path

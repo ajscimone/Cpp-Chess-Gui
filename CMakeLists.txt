@@ -29,6 +29,8 @@ add_executable(Main
 		source/Knight.cpp 
 		source/King.hpp 
 		source/King.cpp)
+		source/Queen.hpp
+		source/Queen.cpp)
 
 # Tests
 add_executable(BoardTest
@@ -51,4 +53,7 @@ add_executable(BoardTest
 		source/Knight.cpp 
 		source/King.hpp 
 		source/King.cpp)
+		source/Queen.hpp
+		source/Queen.cpp)
 target_link_libraries(BoardTest TestRunner)
+
