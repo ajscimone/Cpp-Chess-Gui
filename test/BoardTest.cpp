@@ -45,35 +45,35 @@ TEST_CASE("Move lengths")
 	REQUIRE(board.getMoveLength(std::make_pair(3,3), std::make_pair(1,1)) == 2);
 }
 
-TEST_CASE("Clear and obstructed paths")
+TEST_CASE("Starting board clear and obstructed paths")
 {
 	Board board;
 
-	// TODO: These tests depend on a board only populated with pawns. As we add more pieces to our constructor for
-	// 		Board, these tests will no longer be accurate.
-
 	// Clear paths
-	REQUIRE(board.isPathClear(std::make_pair(0,0), std::make_pair(0,0)) == true); // same location
-	REQUIRE(board.isPathClear(std::make_pair(1,0), std::make_pair(1,1)) == true); // adjacent location
-	REQUIRE(board.isPathClear(std::make_pair(1,3), std::make_pair(6,3)) == true);	// N->S vertical
-	REQUIRE(board.isPathClear(std::make_pair(0,0), std::make_pair(0,7)) == true); // W->E horizontal
-	REQUIRE(board.isPathClear(std::make_pair(2,2), std::make_pair(5,5)) == true); // NW->SE diagonal
-	REQUIRE(board.isPathClear(std::make_pair(5,5), std::make_pair(2,2)) == true); // SE->NW diagonal
-	REQUIRE(board.isPathClear(std::make_pair(6,6), std::make_pair(1,1)) == true); // SE->NW diagonal
-	REQUIRE(board.isPathClear(std::make_pair(1,1), std::make_pair(6,6)) == true); // NW->SE diagonal
-	REQUIRE(board.isPathClear(std::make_pair(6,1), std::make_pair(1,6)) == true); // SW->NE diagonal
+	REQUIRE(board.isPathClear(std::make_pair(0,0), std::make_pair(0,0)) == true); 	// same location
+	REQUIRE(board.isPathClear(std::make_pair(1,0), std::make_pair(1,1)) == true); 	// adjacent location
+	REQUIRE(board.isPathClear(std::make_pair(1,3), std::make_pair(5,3)) == true);	// N->S vertical
+	REQUIRE(board.isPathClear(std::make_pair(2,0), std::make_pair(2,7)) == true); 	// W->E horizontal
+	REQUIRE(board.isPathClear(std::make_pair(2,2), std::make_pair(5,5)) == true); 	// NW->SE diagonal
+	REQUIRE(board.isPathClear(std::make_pair(5,5), std::make_pair(2,2)) == true); 	// SE->NW diagonal
+	REQUIRE(board.isPathClear(std::make_pair(2,2), std::make_pair(5,5)) == true); 	// NW->SE diagonal
+	REQUIRE(board.isPathClear(std::make_pair(5,1), std::make_pair(3,3)) == true); 	// SW->NE diagonal
+	REQUIRE(board.isPathClear(std::make_pair(5,0), std::make_pair(2,3)) == true); 	// off-center diagonal
+	REQUIRE(board.isPathClear(std::make_pair(4,6), std::make_pair(2,4)) == true); 	// off-center diagonal
 
 	// Obstructed paths
-	REQUIRE(board.isPathClear(std::make_pair(0,2), std::make_pair(2,2)) == false); // N->S vertical
-	REQUIRE(board.isPathClear(std::make_pair(0,3), std::make_pair(7,3)) == false); // N->S vertical
-	REQUIRE(board.isPathClear(std::make_pair(1,0), std::make_pair(1,2)) == false); // W->E horizontal
-	REQUIRE(board.isPathClear(std::make_pair(0,0), std::make_pair(7,7)) == false); // NW->SE diagonal
-	REQUIRE(board.isPathClear(std::make_pair(7,7), std::make_pair(0,0)) == false); // SE->NW diagonal
-	REQUIRE(board.isPathClear(std::make_pair(7,0), std::make_pair(0,7)) == false); // SW->NE diagonal
-	REQUIRE(board.isPathClear(std::make_pair(3,2), std::make_pair(4,7)) == false); // not vertical, horizontal, nor diagonal
+	REQUIRE(board.isPathClear(std::make_pair(0,2), std::make_pair(2,2)) == false); 	// N->S vertical
+	REQUIRE(board.isPathClear(std::make_pair(0,3), std::make_pair(7,3)) == false); 	// N->S vertical
+	REQUIRE(board.isPathClear(std::make_pair(1,0), std::make_pair(1,2)) == false); 	// W->E horizontal
+	REQUIRE(board.isPathClear(std::make_pair(0,0), std::make_pair(7,7)) == false); 	// NW->SE diagonal
+	REQUIRE(board.isPathClear(std::make_pair(7,7), std::make_pair(0,0)) == false); 	// SE->NW diagonal
+	REQUIRE(board.isPathClear(std::make_pair(7,0), std::make_pair(0,7)) == false); 	// SW->NE diagonal
+	REQUIRE(board.isPathClear(std::make_pair(3,7), std::make_pair(0,4)) == false); 	// off-center diagonal
+	REQUIRE(board.isPathClear(std::make_pair(4,6), std::make_pair(7,3)) == false); 	// off-center diagonal
+	REQUIRE(board.isPathClear(std::make_pair(3,2), std::make_pair(4,7)) == false); 	// not vertical, horizontal, nor diagonal
 }
 
-TEST_CASE("Foreward moves")
+TEST_CASE("Forward moves")
 {
 	Board board;
 	const Piece *whitePawn = board.getPiece(std::make_pair(6,7));
@@ -88,7 +88,44 @@ TEST_CASE("Foreward moves")
 	REQUIRE(board.isForwardMove(std::make_pair(1,7), std::make_pair(0,7), blackPawn) == false);
 }
 
-TEST_CASE("Pawn moves")
+TEST_CASE("Algebraic to integer coordinate translation")
 {
-	// TODO: Implement unit tests for isValidMove() for Pawn
+	Board board;
+
+	// Corners
+	REQUIRE(board.algebraicToInt("a8") == std::make_pair(0,0));
+	REQUIRE(board.algebraicToInt("h8") == std::make_pair(0,7));
+	REQUIRE(board.algebraicToInt("a1") == std::make_pair(7,0));
+	REQUIRE(board.algebraicToInt("h1") == std::make_pair(7,7));
+
+	// Edges
+	REQUIRE(board.algebraicToInt("a6") == std::make_pair(2,0));
+	REQUIRE(board.algebraicToInt("g8") == std::make_pair(0,6));
+	REQUIRE(board.algebraicToInt("h5") == std::make_pair(3,7));
+	REQUIRE(board.algebraicToInt("d1") == std::make_pair(7,3));
+
+	// Interior
+	REQUIRE(board.algebraicToInt("c6") == std::make_pair(2,2));
+	REQUIRE(board.algebraicToInt("f5") == std::make_pair(3,5));
+}
+
+TEST_CASE("Integer to algebraic coordinate translation")
+{
+	Board board;
+
+	// Corners
+	REQUIRE(board.intToAlgebraic(std::make_pair(0,0)) == "a8");
+	REQUIRE(board.intToAlgebraic(std::make_pair(0,7)) == "h8");
+	REQUIRE(board.intToAlgebraic(std::make_pair(7,0)) == "a1");
+	REQUIRE(board.intToAlgebraic(std::make_pair(7,7)) == "h1");
+
+	// Edges
+	REQUIRE(board.intToAlgebraic(std::make_pair(2,0)) == "a6");
+	REQUIRE(board.intToAlgebraic(std::make_pair(0,6)) == "g8");
+	REQUIRE(board.intToAlgebraic(std::make_pair(3,7)) == "h5");
+	REQUIRE(board.intToAlgebraic(std::make_pair(7,3)) == "d1");
+
+	// Interior
+	REQUIRE(board.intToAlgebraic(std::make_pair(2,2)) == "c6");
+	REQUIRE(board.intToAlgebraic(std::make_pair(3,5)) == "f5");
 }
