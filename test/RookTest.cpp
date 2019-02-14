@@ -3,54 +3,62 @@
 #include "../include/catch.hpp"
 #include "../source/Board.hpp"
 
-
-
-TEST_CASE("Eight possible knight move types")
+TEST_CASE("Four types of Rook move types")
 {
-	Board B;
-	// Up-right
-	REQUIRE(B.movePiece(std::make_pair(7, 1), std::make_pair(5, 2)) == true);
-	// Right-up
-	REQUIRE(B.movePiece(std::make_pair(5, 2), std::make_pair(4, 4)) == true);
-	// Left-up
-	REQUIRE(B.movePiece(std::make_pair(4, 4), std::make_pair(3, 2)) == true);
-	// Right-down
-	REQUIRE(B.movePiece(std::make_pair(3,2), std::make_pair(4, 4)) == true);
-	// Left-down
-	REQUIRE(B.movePiece(std::make_pair(4, 4), std::make_pair(5, 2)) == true);
-	// Up-left
-	REQUIRE(B.movePiece(std::make_pair(7, 6), std::make_pair(5, 5)) == true);
-	// Down-left
-	REQUIRE(B.movePiece(std::make_pair(0, 6), std::make_pair(2, 5)) == true);
-	// Down-right
-	REQUIRE(B.movePiece(std::make_pair(0, 1), std::make_pair(2, 2)) == true);
+	Board B = Board(false, false, true, false, false, false);
+	//Usage -- Board(bool Pawns, bool Knights, bool Rooks, bool Bishops, bool Queens, bool Kings);
+
+	// Down
+	REQUIRE(B.movePiece(std::make_pair(0, 0), std::make_pair(5, 0)) == true);
+	REQUIRE(B.getPiece(std::make_pair(5, 0))->getColor() == BLACK);
+	REQUIRE(B.getPiece(std::make_pair(5, 0))->getMoved() == true);
+	REQUIRE(B.getPiece(std::make_pair(5, 0))->getType() == ROOK);
+
+	// Left
+	REQUIRE(B.movePiece(std::make_pair(0, 7), std::make_pair(0, 0)) == true);
+	REQUIRE(B.getPiece(std::make_pair(0, 0))->getColor() == BLACK);
+	REQUIRE(B.getPiece(std::make_pair(0, 0))->getMoved() == true);
+	REQUIRE(B.getPiece(std::make_pair(0, 0))->getType() == ROOK);
+
+	// Up
+	REQUIRE(B.movePiece(std::make_pair(7, 7), std::make_pair(3, 7)) == true);
+	REQUIRE(B.getPiece(std::make_pair(3, 7))->getColor() == WHITE);
+	REQUIRE(B.getPiece(std::make_pair(3, 7))->getMoved() == true);
+	REQUIRE(B.getPiece(std::make_pair(3, 7))->getType() == ROOK);
+
+	// Right
+	REQUIRE(B.movePiece(std::make_pair(7, 0), std::make_pair(7, 7)) == true);
+	REQUIRE(B.getPiece(std::make_pair(7, 7))->getColor() == WHITE);
+	REQUIRE(B.getPiece(std::make_pair(7, 7))->getMoved() == true);
+	REQUIRE(B.getPiece(std::make_pair(7, 7))->getType() == ROOK);
 }
 
-TEST_CASE("Captures")
+TEST_CASE("Capturing Pieces")
 {
-	Board B;
+	Board B = Board(false, false, true, false, true, false);
 
-	// Positioning for capture
-	REQUIRE(B.movePiece(std::make_pair(7, 1), std::make_pair(5, 2)) == true);
-	REQUIRE(B.movePiece(std::make_pair(5, 2), std::make_pair(3, 3)) == true);
-	
-	// Capturing pawn
-	REQUIRE(B.movePiece(std::make_pair(3, 3), std::make_pair(1, 4)) == true);
+	// Take Piece
+	REQUIRE(B.movePiece(std::make_pair(0, 0), std::make_pair(1, 0)) == true);
+	REQUIRE(B.movePiece(std::make_pair(1, 0), std::make_pair(1, 3)) == true);
+	REQUIRE(B.movePiece(std::make_pair(1, 3), std::make_pair(7, 3)) == true);
 
-	// Capturing knight
-	REQUIRE(B.movePiece(std::make_pair(1, 4), std::make_pair(0, 6)) == true);
-
+	REQUIRE(B.getPiece(std::make_pair(7, 3))->getColor() == BLACK);
+	REQUIRE(B.getPiece(std::make_pair(7, 3))->getMoved() == true);
+	REQUIRE(B.getPiece(std::make_pair(7, 3))->getType() == ROOK);
 }
 
-TEST_CASE("Illegal moves")
+TEST_CASE("Illegal Moves")
 {
-	Board B;
+	Board B = Board(false, false, true, false, false, false);
+	//Board(bool Pawns, bool Knights, bool Rooks, bool Bishops, bool Queens, bool Kings);
 
-	// Moving in ways not allowed by knights
-	REQUIRE(B.movePiece(std::make_pair(7, 1), std::make_pair(5, 1)) == false);
-	REQUIRE(B.movePiece(std::make_pair(7, 1), std::make_pair(4, 2)) == false);
+	REQUIRE(B.movePiece(std::make_pair(0, 0), std::make_pair(1, 1)) == false);
+	REQUIRE(B.getPiece(std::make_pair(0, 0))->getColor() == BLACK);
+	REQUIRE(B.getPiece(std::make_pair(0, 0))->getMoved() == false);
+	REQUIRE(B.getPiece(std::make_pair(0, 0))->getType() == ROOK);
 
-	// Moving to squares occupied by friendly pieces
-	REQUIRE(B.movePiece(std::make_pair(7, 1), std::make_pair(6, 3)) == false);
-	REQUIRE(B.movePiece(std::make_pair(0, 6), std::make_pair(1, 4)) == false);
+	REQUIRE(B.movePiece(std::make_pair(7, 7), std::make_pair(5, 4)) == false);
+	REQUIRE(B.getPiece(std::make_pair(7, 7))->getColor() == WHITE);
+	REQUIRE(B.getPiece(std::make_pair(7, 7))->getMoved() == false);
+	REQUIRE(B.getPiece(std::make_pair(7, 7))->getType() == ROOK);
 }
