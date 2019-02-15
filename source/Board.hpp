@@ -18,7 +18,7 @@ public:
 	Board();
 
 	// Unit Test Constructor
-	Board(bool Pawns, bool Rooks, bool Bishops, bool Queens, bool Kings);
+	Board(bool Pawns, bool Knights, bool Rooks, bool Bishops, bool Queens, bool Kings);
 
 	// General
 	void printBoard();
