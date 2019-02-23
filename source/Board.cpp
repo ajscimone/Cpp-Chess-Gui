@@ -556,6 +556,11 @@ bool Board::isValidMove(const std::pair<int, int> &fromCoords, const std::pair<i
 
 	// Check if this is a valid move for this piece
 	const Piece *piece = getPiece(fromCoords);
+	if (piece == nullptr)
+	{
+		std::cout << "Error: No piece at this starting square" << '\n';
+		return false;
+	}
 	if (!piece->isValidMove(this, fromCoords, toCoords))
 	{
 		std::cout << "Error: This is an invalid move for this piece" << '\n';
