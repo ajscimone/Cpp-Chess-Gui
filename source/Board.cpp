@@ -546,7 +546,7 @@ bool Board::isValidMove(const std::pair<int, int> &fromCoords, const std::pair<i
 		return false;
 	}
 
-	// Check if from location is occupied by piece of same color
+	// Check if to location is occupied by piece of same color
 	if (isOccupiedSameColor(fromCoords, toCoords))
 	{
 		std::cout << "Error: Cannot move from " << intToAlgebraic(fromCoords) << " to " << intToAlgebraic(toCoords)
