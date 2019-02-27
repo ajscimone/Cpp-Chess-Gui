@@ -172,6 +172,8 @@ void Board::printBoard()
 			std::cout << "\n";											// print newline every 8 columns
 		}
 		i++;
+
+		(void) val;
 	}
 	std::cout << "\n" << "\n";
 }
@@ -206,6 +208,8 @@ void Board::printBoardAlgebraicAxes()
 			std::cout << '\n';											// print newline every 8 columns
 		}
 		iterator++;
+
+		(void) val;
 	}
 	std::cout << '\n';
 	std::cout << "    a   b   c   d   e   f   g   h" << '\n';
