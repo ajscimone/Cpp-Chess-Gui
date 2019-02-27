@@ -173,6 +173,7 @@ void Board::printBoard()
 		}
 		i++;
 
+		// This variable is currently unused - so this silences the compiler warnings
 		(void) val;
 	}
 	std::cout << "\n" << "\n";
@@ -209,6 +210,7 @@ void Board::printBoardAlgebraicAxes()
 		}
 		iterator++;
 
+		// This variable is currently unused - so this silences the compiler warnings
 		(void) val;
 	}
 	std::cout << '\n';
