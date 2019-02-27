@@ -6,7 +6,7 @@
 /* Basic implementation of chess. No players, no checkmate, etc. */
 void Game::run()
 {
-	// TODO: Check game state (check, stalemate, etc.)
+	// TODO: Check checkmate (i.e. no moves for the player in check) and stalemate (no moves for anyone)
 
 	// Set up turn-based game
 	std::string input;
@@ -14,7 +14,7 @@ void Game::run()
 	Color toMove = getTurn(currentMove);
 
 	// Print instructions
-	std::cout << "Welcome to Chara Chess. Enter moves as space-separated strings (e.g. e2 e4) or -1 to exit." << '\n';
+	std::cout << "Welcome to Chara Chess. Enter moves as space-separated strings (e.g. e2 e4) or exit to quit." << '\n';
 
 	// Repeat until game is finished
 	while (true)
@@ -26,10 +26,34 @@ void Game::run()
 		std::cout << printColor(toMove) << "'s turn. Enter move: ";
 		std::getline(std::cin, input);
 
-		// Exit if commanded
-		if (input == "-1")
+		// Handle non-move commands
+		if (input == "exit")
 		{
 			break;
+		}
+		else if (input == "moves")
+		{
+			board.printMoves();
+			continue;
+		}
+		else if (input == "revert")
+		{
+			if (currentMove > 1)
+			{
+				board.revertLastMove();
+				currentMove--;
+				toMove = getTurn(currentMove);
+			}
+			else
+			{
+				std::cout << "Can't revert - already at beginning of game." << '\n';
+			}
+			continue;
+		}
+		else if (input == "captures")
+		{
+			board.printCapturedPieces();
+			continue;
 		}
 
 		// Convert input to a move
@@ -52,6 +76,15 @@ void Game::run()
 
 		// Move piece
 		board.movePiece(from, to);
+
+		// Verify that move doesn't put player in check
+		if (isInCheck(toMove))
+		{
+			// If move puts player in check, print error, revert move, and let player enter different move
+			std::cout << "Error: This puts " << printColor(toMove) << " in check.\n";
+			board.revertLastMove();
+			continue;
+		}
 
 		// Switch players
 		currentMove++;
