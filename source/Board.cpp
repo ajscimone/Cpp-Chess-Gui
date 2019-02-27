@@ -227,7 +227,7 @@ bool Board::movePiece(const std::pair<int, int> &fromCoords, const std::pair<int
 	{
 		// All checks have passed so we can set the piece
 
-		//
+		// If the piece represents a capture (i.e., destination is occupied), then save captured piece
 		if (squares[toCoords]->getPiece() != nullptr)
 		{
 			size_t index = moves.size();

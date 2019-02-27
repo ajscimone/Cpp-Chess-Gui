@@ -7,7 +7,6 @@
 void Game::run()
 {
 	// TODO: Check checkmate (i.e. no moves for the player in check) and stalemate (no moves for anyone)
-
 	// Set up turn-based game
 	std::string input;
 	int currentMove = 1;
