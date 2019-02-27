@@ -6,35 +6,56 @@
 /* Basic implementation of chess. No players, no checkmate, etc. */
 void Game::run()
 {
-
-	// TODO: Make turn-based
 	// TODO: Check game state (check, stalemate, etc.)
 
+	// Set up turn-based game
 	std::string input;
+	int currentMove = 1;
+	Color toMove = getTurn(currentMove);
 
-	board.printBoardAlgebraicAxes();
-	std::cout << "Enter a space-separated move (like e6 e5): ";
-	std::getline(std::cin, input);
+	// Print instructions
+	std::cout << "Welcome to Chara Chess. Enter moves as space-separated strings (e.g. e2 e4) or -1 to exit." << '\n';
 
-	while (input != "-1")
+	// Repeat until game is finished
+	while (true)
 	{
+		// Print board
+		board.printBoardAlgebraicAxes();
+
+		// Get first input
+		std::cout << printColor(toMove) << "'s turn. Enter move: ";
+		std::getline(std::cin, input);
+
+		// Exit if commanded
+		if (input == "-1")
+		{
+			break;
+		}
+
+		// Convert input to a move
 		std::string buf;					// for parsing input
 		std::stringstream ss(input);       	// insert the string into a stream
 		std::vector<std::string> tokens; 	// create vector to hold substrings
-
 		while (ss >> buf)
 		{
 			tokens.push_back(buf);
 		}
-
 		std::pair<int, int> from = board.algebraicToInt(tokens[0]); 	// convert substring to pair
 		std::pair<int, int> to = board.algebraicToInt(tokens[1]);		// convert substring to pair
 
+		// Verify that the correct player is moving
+		if (board.getPiece(from)->getColor() != toMove)
+		{
+			std::cout << "Error: It's " << printColor(toMove) << "'s turn." << '\n';
+			continue;
+		}
+
+		// Move piece
 		board.movePiece(from, to);
 
-		board.printBoardAlgebraicAxes();
-		std::cout << "Enter a space-separated move (like e6 e5): ";
-		std::getline(std::cin, input);
+		// Switch players
+		currentMove++;
+		toMove = getTurn(currentMove);
 	}
 }
 
@@ -125,6 +146,7 @@ void Game::testRun()
 	board.printBoardAlgebraicAxes();
 }
 
+/* Determines whether a player is in check based on qualities of the Board. */
 bool Game::isInCheck(Color defendingColor) const
 {
 	// We'll use this to get the opposing sides' pieces
@@ -154,12 +176,40 @@ bool Game::isInCheck(Color defendingColor) const
 	return false;
 }
 
+/* Pass a move from the Game to the Board. */
 bool Game::move(std::pair<int, int> fromCoords, std::pair<int, int> toCoords)
 {
 	return board.movePiece(fromCoords, toCoords);
 }
 
+/* Print the Board. */
 void Game::printBoard()
 {
 	board.printBoardAlgebraicAxes();
+}
+
+/* Determine whose turn it is based on the number of moves in the current game. */
+Color Game::getTurn(int moveNumber) const
+{
+	if (moveNumber % 2 == 1)
+	{
+		return WHITE;
+	}
+	else
+	{
+		return BLACK;
+	}
+}
+
+/* Print the string representation of a Color enum. */
+std::string Game::printColor(Color color)
+{
+	if (color == WHITE)
+	{
+		return "White";
+	}
+	else
+	{
+		return "Black";
+	}
 }
