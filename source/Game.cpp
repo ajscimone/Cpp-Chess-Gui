@@ -7,6 +7,7 @@
 void Game::run()
 {
 	// TODO: Check checkmate (i.e. no moves for the player in check) and stalemate (no moves for anyone)
+
 	// Set up turn-based game
 	std::string input;
 	int currentMove = 1;
@@ -73,21 +74,27 @@ void Game::run()
 			continue;
 		}
 
-		// Move piece
-		board.movePiece(from, to);
-
-		// Verify that move doesn't put player in check
-		if (isInCheck(toMove))
+		// Attempt move piece
+		if (board.movePiece(from, to))
 		{
-			// If move puts player in check, print error, revert move, and let player enter different move
-			std::cout << "Error: This puts " << printColor(toMove) << " in check.\n";
-			board.revertLastMove();
-			continue;
+			// Verify that move doesn't put player in check, else switch players
+			if (isInCheck(toMove))
+			{
+				// If move puts player in check, print error, revert move, and let player enter different move
+				std::cout << "Error: This leaves " << printColor(toMove) << " in check.\n";
+				board.revertLastMove();
+				continue;
+			}
+			else
+			{
+				currentMove++;
+				toMove = getTurn(currentMove);
+			}
 		}
-
-		// Switch players
-		currentMove++;
-		toMove = getTurn(currentMove);
+		else
+		{
+			std::cout << "Error: Invalid move.\n";
+		}
 	}
 }
 
