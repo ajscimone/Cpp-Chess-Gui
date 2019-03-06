@@ -43,14 +43,17 @@ public:
 	bool isValidCastle(const std::pair<int, int> &fromCoords, const std::pair<int, int> &toCoords) const;
 	int getMoveLength(const std::pair<int, int> &fromCoords, const std::pair<int, int> &toCoords) const;
 
-	// Pieces
+	// Pieces and locations
 	std::vector<Piece*> getPieces(Color color) const;
 	std::vector<std::pair<int,int>> getPieceLocations(Color color) const;
 	std::pair<int,int> getKingLocation(Color color) const;
+	std::vector<std::pair<int,int>> getLocations() const;
 
-	// Utility functions
+	// Conversions
 	std::pair<int, int> algebraicToInt(std::string algebraicCoords) const;
 	std::string intToAlgebraic(std::pair<int, int> intCoords) const;
+
+	// Printing
 	void printMoves();
 	void printCapturedPieces();
 

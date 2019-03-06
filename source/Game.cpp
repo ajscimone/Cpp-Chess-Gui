@@ -19,6 +19,13 @@ void Game::run()
 	// Repeat until game is finished
 	while (true)
 	{
+		// Determine if a player is in check
+		if (isInCheck(toMove))
+		{
+			std::cout << printColor(toMove) << " is in checkmate. Game over." << '\n';
+			break;
+		}
+
 		// Print board
 		board.printBoardAlgebraicAxes();
 
@@ -213,6 +220,43 @@ bool Game::isInCheck(Color defendingColor) const
 
 	// When you come at the king, you best not miss
 	return false;
+}
+
+/* Returns true if a color is in checkmate. */
+bool Game::isInCheckMate(Color defendingColor)
+{
+	if (isInCheck(defendingColor))
+	{
+		std::vector<std::pair<int, int>> pieceLocations = board.getPieceLocations(defendingColor);
+		std::vector<std::pair<int, int>> locations = board.getLocations();
+
+		for (auto const &pieceLocation : pieceLocations)
+		{
+			for (auto const &location : locations)
+			{
+				// Attempt move piece
+				if (board.movePiece(pieceLocation, location))
+				{
+					// If player is no longer in check, then there's hope! Revert move and return false.
+					if (!isInCheck(defendingColor))
+					{
+						board.revertLastMove();
+						return false;
+					}
+
+					// We'll also need to revert the last move if the player was still in check.
+					board.revertLastMove();
+				}
+			}
+		}
+	}
+	else
+	{
+		return false;
+	}
+
+	// No other options for defendingColor, so return true for isCheckMate
+	return true;
 }
 
 /* Pass a move from the Game to the Board. */

@@ -220,7 +220,9 @@ void Board::printBoardAlgebraicAxes()
 /* Attempts to move a piece from one location to another. Checks the following:
  * - If origin and destination are on the board
  * - If destination is occupied by piece of same color as piece at origin
- * - If this is a valid move for the piece at the the origin */
+ * - If this is a valid move for the piece at the the origin
+ * Note that this function does not check gameplay characteristics like check and checkmate.
+ * */
 bool Board::movePiece(const std::pair<int, int> &fromCoords, const std::pair<int, int> &toCoords)
 {
 	if (isValidMove(fromCoords, toCoords))
@@ -628,7 +630,8 @@ std::vector<std::pair<int, int>> Board::getPieceLocations(Color color) const
 	std::vector<std::pair<int, int>> pieceLocations;
 	pieceLocations.reserve(squares.size());
 
-	for (auto const& square : squares) {
+	for (auto const& square : squares)
+	{
 		Piece* piece = square.second->getPiece();
 		if (piece != nullptr && piece->getColor() == color)
 		{
@@ -697,6 +700,20 @@ void Board::printCapturedPieces()
 	{
 		std::cout << entry.first << " " << *entry.second << '\n';
 	}
+}
+
+/* Returns a vector of all the locations on the board. */
+std::vector<std::pair<int, int>> Board::getLocations() const
+{
+	std::vector<std::pair<int, int>> pieceLocations;
+	pieceLocations.reserve(squares.size());
+
+	for (auto const& square : squares)
+	{
+		pieceLocations.push_back(square.first);
+	}
+
+	return pieceLocations;
 }
 
 /* Destructor */
