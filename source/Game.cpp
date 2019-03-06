@@ -6,8 +6,6 @@
 /* Basic implementation of chess. */
 void Game::run()
 {
-	// TODO: Check stalemate (no moves for anyone)
-
 	// Set up turn-based game
 	std::string input;
 	int currentMove = 1;
@@ -23,6 +21,13 @@ void Game::run()
 		if (isInCheckMate(toMove))
 		{
 			std::cout << printColor(toMove) << " is in checkmate. Game over." << '\n';
+			break;
+		}
+
+		// Determine if a player is in check
+		if (isInStalemate(toMove))
+		{
+			std::cout << printColor(toMove) << " is in stalemate. Draw." << '\n';
 			break;
 		}
 
@@ -222,7 +227,9 @@ bool Game::isInCheck(Color defendingColor) const
 	return false;
 }
 
-/* Returns true if a color is in checkmate. */
+/* Returns true if a player is in checkmate. The conditions of checkmate are:
+ * - In check
+ * - No legal moves */
 bool Game::isInCheckMate(Color defendingColor)
 {
 	if (isInCheck(defendingColor))
@@ -256,6 +263,45 @@ bool Game::isInCheckMate(Color defendingColor)
 	}
 
 	// No other options for defendingColor, so return true for isCheckMate
+	return true;
+}
+
+/* Returns true if a player is in stalemate. The conditions of stalemate are:
+ * - Not in check
+ * - No legal moves */
+bool Game::isInStalemate(Color defendingColor)
+{
+	if (isInCheck(defendingColor))
+	{
+		return false;
+	}
+	else
+	{
+		std::vector<std::pair<int, int>> pieceLocations = board.getPieceLocations(defendingColor);
+		std::vector<std::pair<int, int>> locations = board.getLocations();
+
+		for (auto const &pieceLocation : pieceLocations)
+		{
+			for (auto const &location : locations)
+			{
+				// Attempt move piece
+				if (board.movePiece(pieceLocation, location))
+				{
+					// If player is still not in check after this move, then revert move and return false.
+					if (!isInCheck(defendingColor))
+					{
+						board.revertLastMove();
+						return false; // not in stalemate
+					}
+
+					// We'll also need to revert the last move if the player was still in check.
+					board.revertLastMove();
+				}
+			}
+		}
+	}
+
+	// No other options for defendingColor, so return true for isStalemate
 	return true;
 }
 

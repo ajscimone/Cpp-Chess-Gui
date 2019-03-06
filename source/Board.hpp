@@ -15,10 +15,8 @@ class Piece;
 
 class Board {
 public:
-	// Constructor
+	// Constructors
 	Board();
-
-	// Unit Test Constructor
 	Board(bool Pawns, bool Knights, bool Rooks, bool Bishops, bool Queens, bool Kings);
 
 	// General

@@ -42,7 +42,6 @@ Board::Board(bool Pawns, bool Knights, bool Rooks, bool Bishops, bool Queens, bo
 		{ createKings(); }
 }
 
-
 /* Squares are stored in a map which maps coordinates as a pair to a unique_ptr to a Square object. For example, the
  * location that corresponds to a8 in algebraic notation would be at std::pair<0,0>.*/
 void Board::prepSquares()
