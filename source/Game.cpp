@@ -3,10 +3,10 @@
 #include <sstream>
 #include "Game.hpp"
 
-/* Basic implementation of chess. No players, no checkmate, etc. */
+/* Basic implementation of chess. */
 void Game::run()
 {
-	// TODO: Check checkmate (i.e. no moves for the player in check) and stalemate (no moves for anyone)
+	// TODO: Check stalemate (no moves for anyone)
 
 	// Set up turn-based game
 	std::string input;
@@ -20,14 +20,14 @@ void Game::run()
 	while (true)
 	{
 		// Determine if a player is in check
-		if (isInCheck(toMove))
+		if (isInCheckMate(toMove))
 		{
 			std::cout << printColor(toMove) << " is in checkmate. Game over." << '\n';
 			break;
 		}
 
 		// Print board
-		board.printBoardAlgebraicAxes();
+		printBoard();
 
 		// Get first input
 		std::cout << printColor(toMove) << "'s turn. Enter move: ";
