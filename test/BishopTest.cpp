@@ -36,14 +36,14 @@ TEST_CASE("Eight types of Queen moves")
 
 TEST_CASE("Capturing Pieces")
 {
-	Board B = Board(true, false, false, true, false, false);
+	Board B = Board(false, false, false, true, false, false);
 
 	// Take Piece
 	REQUIRE(B.movePiece(std::make_pair(0, 2), std::make_pair(5, 7)) == true);
-	REQUIRE(B.movePiece(std::make_pair(5, 7), std::make_pair(6, 6)) == true);
-	REQUIRE(B.getPiece(std::make_pair(6, 6))->getColor() == BLACK);
-	REQUIRE(B.getPiece(std::make_pair(6, 6))->getMoved() == true);
-	REQUIRE(B.getPiece(std::make_pair(6, 6))->getType() == BISHOP);
+	REQUIRE(B.movePiece(std::make_pair(5, 7), std::make_pair(7, 5)) == true);
+	REQUIRE(B.getPiece(std::make_pair(7, 5))->getColor() == BLACK);
+	REQUIRE(B.getPiece(std::make_pair(7, 5))->getMoved() == true);
+	REQUIRE(B.getPiece(std::make_pair(7, 5))->getType() == BISHOP);
 }
 
 TEST_CASE("Illegal Moves")
